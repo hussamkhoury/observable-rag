@@ -1,0 +1,19 @@
+Data Chunking Pipeline
+======================
+
+Source: data/synthetic_knowledge_items.csv (100 knowledge items, 3 text columns: ki_text, alt_ki_text, bad_ki_text)
+Output: data/chunks.jsonl (512 chunks)
+
+Method: Semantic boundary chunking
+- Text is split at paragraph breaks (\n\n) and markdown heading boundaries (**Heading**)
+- Small segments are greedily merged up to 500 tokens
+- Tokenizer: tiktoken (cl100k_base) — same tokenizer used by OpenAI embeddings
+
+Each chunk contains:
+  - chunk_id: globally unique sequential ID
+  - topic: knowledge item topic from ki_topic column
+  - source_column: which column the chunk came from (ki_text, alt_ki_text, or bad_ki_text)
+  - text: the chunk content
+  - token_count: number of tokens in the chunk
+
+Stats: min=23 tokens, max=503 tokens, avg=331 tokens per chunk
